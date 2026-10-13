@@ -29,4 +29,5 @@ def get_ssl_status() -> str:
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    mcp.run(transport="sse")
+    # Render ke liye host 0.0.0.0 set karna zaroori hai
+    mcp.run(transport="sse", host="0.0.0.0", port=port)
