@@ -1,7 +1,10 @@
 import os
 import pandas as pd
+import uvicorn
+from fastapi import FastAPI
 from mcp.server.fastmcp import FastMCP
 
+# FastMCP instance
 mcp = FastMCP("SSLDataMCPServer")
 
 FILE_PATH = "Hardware Support Details.xlsx"
@@ -27,7 +30,10 @@ def get_ssl_status() -> str:
     except Exception as e:
         return f"SSL data fetch karne mein error aaya: {str(e)}"
 
+# FastAPI app get karte hain MCP se
+app = mcp.sse_app()
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    # Render ke liye host 0.0.0.0 set karna zaroori hai
-    mcp.run(transport="sse", host="0.0.0.0", port=port)
+    # Direct uvicorn run jo 0.0.0.0 par bind karega
+    uvicorn.run(app, host="0.0.0.0", port=port)
